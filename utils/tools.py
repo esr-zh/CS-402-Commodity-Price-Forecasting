@@ -108,3 +108,27 @@ def test_params_flop(model,x_shape):
         # print('Params:' + params)
         print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
         print('{:<30}  {:<8}'.format('Number of parameters: ', params))
+
+def cal_accuracy(y_pred, y_true):
+    return np.mean(y_pred == y_true)
+
+def cal_f1(y_pred, y_true):
+    # True positives (TP): The cases in which y_true is 1 and y_pred is 1.
+    TP = np.sum((y_pred == 1) & (y_true == 1))
+    
+    # False positives (FP): The cases in which y_true is 0 and y_pred is 1.
+    FP = np.sum((y_pred == 1) & (y_true == 0))
+    
+    # False negatives (FN): The cases in which y_true is 1 and y_pred is 0.
+    FN = np.sum((y_pred == 0) & (y_true == 1))
+    
+    # Precision calculation.
+    precision = TP / (TP + FP) if (TP + FP) > 0 else 0
+    
+    # Recall calculation.
+    recall = TP / (TP + FN) if (TP + FN) > 0 else 0
+    
+    # F1 Score calculation.
+    F1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+    
+    return F1
